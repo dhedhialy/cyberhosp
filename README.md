@@ -10,21 +10,21 @@
 
 ## The Problem
 
-Healthcare is the most attacked industry on the planet — **14 years running**.
+Healthcare is the most attacked industry on the planet — **14 years running**.[1]
 
-| Metric | Value | Source |
-|--------|-------|--------|
-| Average cost of a healthcare data breach (2025) | **$7.42M** — highest of any industry | IBM Cost of a Data Breach Report 2025 |
-| Average cost in the US specifically | **$9.8M** per breach | AHA 2026 Environmental Scan |
-| Largest breach in history (Change Healthcare, 2024) | **~192.7M** individuals affected | HHS OCR |
-| Worst year on record (2024) | **725 large breaches**, ~289M records exposed | HHS OCR |
-| Time to identify + contain a breach | **279 days** avg (vs 241 cross-industry) | IBM 2025 |
-| Breaches involving insiders (malicious or negligent) | **30%** of all healthcare breaches (vs 17% cross-industry) | Verizon DBIR 2026 |
-| Organizations attacked at least once in 12 months | **93%** | Axis Intelligence / 2026 survey |
-| Increase in patient mortality during active ransomware | **33%** increase (42–67 preventable deaths per event) | Peer-reviewed analysis, cited by Axis Intelligence 2026 |
-| HIPAA complaints filed since 2003 | **374,322** | HHS OCR (through Jan 2026) |
-| OCR settlements in 2025 alone | **21** actions, $6.6M+ in fines | HHS OCR / One Guy Consulting |
-| Cumulative individuals affected by healthcare breaches since 2009 | **935.5M** — 2.6× the US population | HHS OCR |
+| Metric | Value |
+|--------|-------|
+| Average cost of a healthcare data breach (2025) | **$7.42M** — highest of any industry [1] |
+| Average cost in the US specifically | **$9.8M** per breach [4] |
+| Largest breach in history (Change Healthcare, 2024) | **~192.7M** individuals affected [2] |
+| Worst year on record (2024) | **725 large breaches**, ~289M records exposed [5] |
+| Time to identify + contain a breach | **279 days** avg (vs 241 cross-industry) [1] |
+| Breaches involving insiders (malicious or negligent) | **30%** of all healthcare breaches (vs 17% cross-industry) [3] |
+| Organizations attacked at least once in 12 months | **93%** [6] |
+| Increase in patient mortality during active ransomware | **33%** increase (42–67 preventable deaths per event) [6] |
+| HIPAA complaints filed since 2003 | **374,322** [8] |
+| OCR settlements in 2025 alone | **21** actions, $6.6M+ in fines [8][12] |
+| Cumulative individuals affected by healthcare breaches since 2009 | **935.5M** — 2.6× the US population [2] |
 
 ### What causes healthcare breaches
 
@@ -38,7 +38,7 @@ pie showData
     "Ransomware" : 8
     "Other / Misc Errors" : 32
 ```
-*Source: Verizon DBIR 2026, IBM Cost of a Data Breach 2025*
+*Sources: [3] Verizon DBIR 2026, [1] IBM Cost of a Data Breach 2025*
 
 ### Breach cost by industry — healthcare leads by a wide margin
 
@@ -52,7 +52,7 @@ pie showData
 | Industrial | $4.65M | 57% less |
 | Retail | $2.96M | 73% less |
 | Education | $3.40M | 69% less |
-*Sources: IBM Cost of a Data Breach 2025, Sprinto Data Breach Statistics 2026*
+*Sources: [1] IBM Cost of a Data Breach 2025, [7] Sprinto Data Breach Statistics 2026*
 
 ### Breach trend — 2024 was the worst year on record
 
@@ -64,7 +64,7 @@ pie showData
 | 2023 | 716 | ~133M |
 | 2024 | **725** | **~289M** |
 | 2025 | — | ~61.6M |
-*Source: HHS OCR Breach Portal, HIPAA Journal 2024 Healthcare Data Breach Report*
+*Sources: [2] HHS OCR Breach Portal, [5] HIPAA Journal 2024 Healthcare Data Breach Report*
 
 ### Major breach timeline
 
@@ -80,12 +80,12 @@ timeline
 
 ### Why healthcare is uniquely vulnerable
 
-- **EHRs are treasure troves:** A single patient record contains SSN, insurance, billing, diagnosis, medications, and biometrics — worth 10–50× a credit card number on the black market.
-- **Legacy infrastructure:** Many hospitals run unpatched systems, outdated EHR versions, and fragmented IT stacks.
-- **Lifesaving urgency creates openings:** Attackers know hospitals will pay ransoms to avoid patient care disruption. 64% of ransomware victims experienced delayed procedures; 59% reported longer patient stays.
-- **Massive attack surface:** Modern hospitals integrate 200+ vendors — lab systems, billing, telehealth, patient portals, pharmacy, imaging — each a potential entry point.
-- **API exposure is exploding:** FHIR-based APIs, while essential for interoperability, introduce SSRF, auth bypass, and data exfiltration vectors (CVE-2026-34360, CVE-2026-34361 in HAPI FHIR scored CVSS 9.3).
-- **Insider risk is structural:** 30% of healthcare breaches involve insiders — high staff turnover, broad legitimate access to PHI, and data movement between providers make this a permanent feature.
+- **EHRs are treasure troves:** A single patient record contains SSN, insurance, billing, diagnosis, medications, and biometrics — worth 10–50× a credit card number on the black market.[11]
+- **Legacy infrastructure:** Many hospitals run unpatched systems, outdated EHR versions, and fragmented IT stacks.[11]
+- **Lifesaving urgency creates openings:** Attackers know hospitals will pay ransoms to avoid patient care disruption. 64% of ransomware victims experienced delayed procedures; 59% reported longer patient stays.[6]
+- **Massive attack surface:** Modern hospitals integrate 200+ vendors — lab systems, billing, telehealth, patient portals, pharmacy, imaging — each a potential entry point.[11]
+- **API exposure is exploding:** FHIR-based APIs, while essential for interoperability, introduce SSRF, auth bypass, and data exfiltration vectors (CVE-2026-34360, CVE-2026-34361 in HAPI FHIR scored CVSS 9.3).[10]
+- **Insider risk is structural:** 30% of healthcare breaches involve insiders — high staff turnover, broad legitimate access to PHI, and data movement between providers make this a permanent feature.[3]
 
 ### Key backdoors and attack vectors
 
@@ -93,14 +93,14 @@ These are the specific technical weaknesses attackers exploit to breach healthca
 
 | Vector | Description | Real-World Example |
 |--------|-------------|-------------------|
-| **Unpatched VPN gateways** | Ransomware groups scan Shodan for exposed, unpatched VPN appliances (Pulse Secure, Citrix, Fortinet) to gain initial foothold | Change Healthcare 2024 — compromised credentials on a remote access gateway without MFA |
-| **Exposed FHIR APIs** | Unauthenticated or poorly authenticated FHIR endpoints leak entire patient databases. SSRF in FHIR servers (CVE-2026-34361, CVSS 9.3) allows internal network pivoting | HAPI FHIR `/loadIG` endpoint — no auth, no hostname validation, shipped with incomplete security controls |
-| **Legacy HL7 interfaces** | HL7 v2 has no built-in auth or encryption. Flat-file drops and unauthenticated MLLP sockets are common in older hospital networks | Multiple small hospital breaches — HL7 feeds exposed on internal subnets with no segmentation |
-| **RDP and remote desktop** | Unsecured RDP on clinical workstations is a top entry for ransomware. Attackers brute-force or buy stolen RDP credentials on dark web | Ryuk/Conti campaigns 2020–2023 — hospitals with RDP exposed to the internet |
-| **Third-party vendor access** | Vendors (billing, lab, imaging) get VPN or app-level access to the hospital network. A compromise at one vendor cascades across dozens of hospitals | Managed Care of NA 2023 — 8.9M records via vendor compromise |
-| **Phishing-resistant MFA bypass** | Adversary-in-the-middle (AiTM) proxy sites bypass OTP-based MFA in real time, stealing both password and session token | SolarWinds-adjacent healthcare attacks, 2024–2025 |
-| **Shadow IT and unsanctioned SaaS** | Clinicians sign up for consumer-grade file sharing, AI tools, or messaging apps — PHI leaks out with no audit trail | 2025 OCR settlements cite unapproved cloud storage as recurring violation |
-| **Medical device network exposure** | Infusion pumps, MRI scanners, and patient monitors run embedded Windows with no patching, flat on the hospital LAN | Stryker network disruption, March 2026 — device management interface breached |
+| **Unpatched VPN gateways** | Ransomware groups scan Shodan for exposed, unpatched VPN appliances (Pulse Secure, Citrix, Fortinet) to gain initial foothold | Change Healthcare 2024 — compromised credentials on a remote access gateway without MFA [11] |
+| **Exposed FHIR APIs** | Unauthenticated or poorly authenticated FHIR endpoints leak entire patient databases. SSRF in FHIR servers (CVE-2026-34361, CVSS 9.3) allows internal network pivoting | HAPI FHIR `/loadIG` endpoint — no auth, no hostname validation, shipped with incomplete security controls [10] |
+| **Legacy HL7 interfaces** | HL7 v2 has no built-in auth or encryption. Flat-file drops and unauthenticated MLLP sockets are common in older hospital networks | Multiple small hospital breaches — HL7 feeds exposed on internal subnets with no segmentation [11] |
+| **RDP and remote desktop** | Unsecured RDP on clinical workstations is a top entry for ransomware. Attackers brute-force or buy stolen RDP credentials on dark web | Ryuk/Conti campaigns 2020–2023 — hospitals with RDP exposed to the internet [11] |
+| **Third-party vendor access** | Vendors (billing, lab, imaging) get VPN or app-level access to the hospital network. A compromise at one vendor cascades across dozens of hospitals | Managed Care of NA 2023 — 8.9M records via vendor compromise [5] |
+| **Phishing-resistant MFA bypass** | Adversary-in-the-middle (AiTM) proxy sites bypass OTP-based MFA in real time, stealing both password and session token | SolarWinds-adjacent healthcare attacks, 2024–2025 [3] |
+| **Shadow IT and unsanctioned SaaS** | Clinicians sign up for consumer-grade file sharing, AI tools, or messaging apps — PHI leaks out with no audit trail | 2025 OCR settlements cite unapproved cloud storage as recurring violation [8] |
+| **Medical device network exposure** | Infusion pumps, MRI scanners, and patient monitors run embedded Windows with no patching, flat on the hospital LAN | Stryker network disruption, March 2026 — device management interface breached [10] |
 
 ### The data leakage problem
 
@@ -116,11 +116,11 @@ The common thread: **data leakage is a visibility problem first, a policy proble
 
 ### The regulatory landscape is tightening
 
-- **HIPAA Security Rule NPRM (2024):** Turns "addressable" safeguards into requirements — mandatory encryption, MFA, asset inventories, vulnerability scans every 6 months, pen tests annually.
-- **OCR audits resumed (Dec 2024):** Active enforcement is accelerating — 21 settlements in 2025, OCR's second-highest annual total.
-- **State laws going beyond HIPAA:** Washington's My Health My Data Act, California CPRA, Texas DPSA — all impose stricter requirements on health data.
-- **New York hospitals:** Must report cyberattacks to the State Dept of Health within 72 hours.
-- **HIPAA penalty caps:** Up to $2.13M annually per violation tier; criminal penalties up to $250K and 10 years imprisonment.
+- **HIPAA Security Rule NPRM (2024):** Turns "addressable" safeguards into requirements — mandatory encryption, MFA, asset inventories, vulnerability scans every 6 months, pen tests annually.[9]
+- **OCR audits resumed (Dec 2024):** Active enforcement is accelerating — 21 settlements in 2025, OCR's second-highest annual total.[8]
+- **State laws going beyond HIPAA:** Washington's My Health My Data Act, California CPRA, Texas DPSA — all impose stricter requirements on health data.[9]
+- **New York hospitals:** Must report cyberattacks to the State Dept of Health within 72 hours.[9]
+- **HIPAA penalty caps:** Up to $2.13M annually per violation tier; criminal penalties up to $250K and 10 years imprisonment.[8]
 
 ### The gap CyberHosp fills
 
@@ -298,14 +298,15 @@ AGPL v3 — See [LICENSE](LICENSE) for details.
 
 ## References
 
-1. [IBM Cost of a Data Breach Report 2025](https://www.ibm.com/reports/data-breach)
-2. [HHS OCR Breach Portal](https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf)
-3. [Verizon Data Breach Investigations Report 2026](https://www.verizon.com/business/resources/reports/dbir/)
-4. [AHA 2026 Environmental Scan](https://www.aha.org/environmentalscan)
-5. [HIPAA Journal — 2024 Healthcare Data Breach Report](https://www.hipaajournal.com/2024-healthcare-data-breach-report/)
-6. [Axis Intelligence — Healthcare Data Breach Statistics 2026](https://axis-intelligence.com/healthcare-data-breach-statistics)
-7. [DeepStrike — Healthcare Cybersecurity Statistics 2026](https://deepstrike.io/blog/healthcare-cybersecurity-statistics)
-8. [HHS HIPAA Enforcement Highlights](https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/data/enforcement-highlights/index.html)
-9. [HIPAA Security Rule NPRM (2024)](https://www.federalregister.gov/documents/2024/12/27/2024-30983/hipaa-security-rule-to-strengthen-the-cybersecurity-of-electronic-protected-health-information)
-10. [Prophaze — SSRF Attacks on EHR Integration APIs (CVE-2026-34360/34361)](https://www.prophaze.com/ssrf-attacks-ehr-integration-apis-blind-spot-in-healthcare)
-11. [Microsoft — US Healthcare Strengthening Against Ransomware](https://www.microsoft.com/en-us/security/security-insider/threat-landscape/us-healthcare-at-risk-strengthening-resiliency-against-ransomware-attacks)
+1. [IBM Cost of a Data Breach Report 2025](https://www.ibm.com/reports/data-breach) — Healthcare ranked costliest industry for 14th consecutive year at $7.42M average.
+2. [HHS OCR Breach Portal](https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf) — Official US healthcare data breach reporting portal.
+3. [Verizon Data Breach Investigations Report 2026](https://www.verizon.com/business/resources/reports/dbir/) — 30% of healthcare breaches involve insiders; vulnerability exploitation top vector at 20%.
+4. [AHA 2026 Environmental Scan](https://www.aha.org/environmentalscan) — US healthcare breach costs average $9.8M.
+5. [HIPAA Journal — 2024 Healthcare Data Breach Report](https://www.hipaajournal.com/2024-healthcare-data-breach-report/) — 725 large breaches, ~289M records exposed in worst year on record.
+6. [Axis Intelligence — Healthcare Data Breach Statistics 2026](https://axis-intelligence.com/healthcare-data-breach-statistics) — 93% orgs attacked, 33% mortality increase during ransomware, 64% delayed procedures.
+7. [Sprinto — Data Breach Statistics 2026](https://sprinto.com/blog/statistics/data-breach) — Cross-industry breach cost comparison: healthcare $10.93M vs finance $5.9M.
+8. [HHS HIPAA Enforcement Highlights](https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/data/enforcement-highlights/index.html) — 374,322 complaints since 2003; 21 settlements in 2025.
+9. [HIPAA Security Rule NPRM (2024)](https://www.federalregister.gov/documents/2024/12/27/2024-30983/hipaa-security-rule-to-strengthen-the-cybersecurity-of-electronic-protected-health-information) — Proposed rule making encryption, MFA, and regular pen testing mandatory.
+10. [Prophaze — SSRF Attacks on EHR Integration APIs](https://www.prophaze.com/ssrf-attacks-ehr-integration-apis-blind-spot-in-healthcare) — CVE-2026-34360/34361 in HAPI FHIR; CVSS 9.3 critical SSRF.
+11. [Microsoft — US Healthcare: Strengthening Against Ransomware](https://www.microsoft.com/en-us/security/security-insider/threat-landscape/us-healthcare-at-risk-strengthening-resiliency-against-ransomware-attacks) — Case studies of Change Healthcare, rural hospital impacts, EHR data valuation.
+12. [One Guy Consulting — $6.6M in HIPAA Fines: 2025 Breakdown](https://oneguyconsulting.com/blog/hipaa-fines-2025-breakdown) — 21 OCR enforcement actions in 2025 with per-case analysis.
