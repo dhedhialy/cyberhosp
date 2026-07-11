@@ -1,0 +1,43 @@
+# CyberHosp default configuration
+
+server:
+  host: "0.0.0.0"
+  port: 8443
+  log_level: "info"
+
+integration:
+  ehr:
+    epic:
+      fhir_base_url: ""
+      auth_type: "oauth2"
+    cerner:
+      fhir_base_url: ""
+      auth_type: "oauth2"
+    meditech:
+      hl7_host: ""
+      hl7_port: 0
+
+audit:
+  storage:
+    backend: "wal"           # write-ahead log, immutable
+    retention_days: 730      # 2 years per HIPAA
+  enable_crypto_chain: true
+
+monitor:
+  analysis_interval_sec: 60
+  baseline_window_days: 30
+  anomaly_threshold: 2.5      # standard deviations
+
+dlp:
+  rules_file: "config/rules/dlp_rules.yaml"
+  action: "alert"              # alert | block | audit_only
+
+alerting:
+  slack_webhook_url: ""
+  email_smtp_host: ""
+  email_from: ""
+  siem_forwarder: ""           # splunk | elk | sentinel
+
+api:
+  rate_limit: 100              # requests/min per client
+  cors_origins: []

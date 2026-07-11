@@ -1,0 +1,28 @@
+# DLP rules — pattern matching against PHI in transit
+
+rules:
+  - id: "ssn-detection"
+    name: "Social Security Number exposure"
+    pattern: "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+    severity: "high"
+    action: "alert"
+
+  - id: "mrn-bulk-export"
+    name: "Bulk Medical Record Number export"
+    threshold: 100             # records per minute
+    severity: "critical"
+    action: "block"
+
+  - id: "phi-email-external"
+    name: "PHI sent to external email"
+    pattern: "\\b(patient|diagnosis|diagnosis_code|ssn|mrn)\\b"
+    context: "outbound_email"
+    severity: "high"
+    action: "alert"
+
+  - id: "mass-file-access"
+    name: "Mass record access anomaly"
+    threshold: 50              # unique patients per hour
+    window_minutes: 60
+    severity: "critical"
+    action: "block"

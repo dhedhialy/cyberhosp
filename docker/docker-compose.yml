@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  cyberhosp:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./data:/app/data
+      - ../config:/app/config:ro
+    environment:
+      - CYBERHOSP_CONFIG=/app/config/default.yaml
+      - CYBERHOSP_LOG_LEVEL=info
+    restart: unless-stopped
+
+  # Immutable audit log storage (optional)
+  # postgres:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_DB: cyberhosp
+  #     POSTGRES_PASSWORD: changeme
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
