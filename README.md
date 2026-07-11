@@ -87,6 +87,33 @@ timeline
 - **API exposure is exploding:** FHIR-based APIs, while essential for interoperability, introduce SSRF, auth bypass, and data exfiltration vectors (CVE-2026-34360, CVE-2026-34361 in HAPI FHIR scored CVSS 9.3).
 - **Insider risk is structural:** 30% of healthcare breaches involve insiders — high staff turnover, broad legitimate access to PHI, and data movement between providers make this a permanent feature.
 
+### Key backdoors and attack vectors
+
+These are the specific technical weaknesses attackers exploit to breach healthcare systems:
+
+| Vector | Description | Real-World Example |
+|--------|-------------|-------------------|
+| **Unpatched VPN gateways** | Ransomware groups scan Shodan for exposed, unpatched VPN appliances (Pulse Secure, Citrix, Fortinet) to gain initial foothold | Change Healthcare 2024 — compromised credentials on a remote access gateway without MFA |
+| **Exposed FHIR APIs** | Unauthenticated or poorly authenticated FHIR endpoints leak entire patient databases. SSRF in FHIR servers (CVE-2026-34361, CVSS 9.3) allows internal network pivoting | HAPI FHIR `/loadIG` endpoint — no auth, no hostname validation, shipped with incomplete security controls |
+| **Legacy HL7 interfaces** | HL7 v2 has no built-in auth or encryption. Flat-file drops and unauthenticated MLLP sockets are common in older hospital networks | Multiple small hospital breaches — HL7 feeds exposed on internal subnets with no segmentation |
+| **RDP and remote desktop** | Unsecured RDP on clinical workstations is a top entry for ransomware. Attackers brute-force or buy stolen RDP credentials on dark web | Ryuk/Conti campaigns 2020–2023 — hospitals with RDP exposed to the internet |
+| **Third-party vendor access** | Vendors (billing, lab, imaging) get VPN or app-level access to the hospital network. A compromise at one vendor cascades across dozens of hospitals | Managed Care of NA 2023 — 8.9M records via vendor compromise |
+| **Phishing-resistant MFA bypass** | Adversary-in-the-middle (AiTM) proxy sites bypass OTP-based MFA in real time, stealing both password and session token | SolarWinds-adjacent healthcare attacks, 2024–2025 |
+| **Shadow IT and unsanctioned SaaS** | Clinicians sign up for consumer-grade file sharing, AI tools, or messaging apps — PHI leaks out with no audit trail | 2025 OCR settlements cite unapproved cloud storage as recurring violation |
+| **Medical device network exposure** | Infusion pumps, MRI scanners, and patient monitors run embedded Windows with no patching, flat on the hospital LAN | Stryker network disruption, March 2026 — device management interface breached |
+
+### The data leakage problem
+
+Data leakage in healthcare is distinct from other breach types because it is often **silent, ongoing, and invisible to traditional perimeter defenses**:
+
+- **Insider exfiltration:** A nurse accessing a celebrity patient's chart "just to look" is a privacy violation. A billing clerk exporting 10,000 rows of patient data to a personal spreadsheet is data leakage. Both happen daily and most hospitals catch neither.
+- **Accidental exposure:** Misconfigured cloud storage, misaddressed faxes, emails with PHI sent to wrong recipients — these are the majority of small breaches that never make headlines but trigger OCR fines.
+- **API scraping:** Legitimate API keys used to paginate through every patient record over hours or days, indistinguishable from normal traffic to the EHR. No alert fires until the data appears on a dark web forum.
+- **Third-party data bleed:** Every integration with a lab, pharmacy, billing service, or population health platform is a pipe through which PHI flows. Most hospitals have no visibility into what data leaves via these pipes.
+- **Device data spillage:** Medical devices generate and transmit PHI (patient name, DOB, measurement data) over unencrypted protocols. A compromised device on the same subnet can silently siphon this data.
+
+The common thread: **data leakage is a visibility problem first, a policy problem second.** You cannot prevent what you cannot see.
+
 ### The regulatory landscape is tightening
 
 - **HIPAA Security Rule NPRM (2024):** Turns "addressable" safeguards into requirements — mandatory encryption, MFA, asset inventories, vulnerability scans every 6 months, pen tests annually.
@@ -118,9 +145,34 @@ xychart-beta
 
 ---
 
-## Platform Architecture
+## Our Approach
 
-## Platform Architecture
+CyberHosp is built on a single principle: **stop the bleed by seeing the flow.** Every PHI access generates a signal — we collect, analyze, and act on those signals in real time.
+
+| Principle | What it means |
+|-----------|--------------|
+| **Read-only by design** | All monitoring is passive. We observe EHR audit streams, write nothing back to clinical systems, and introduce zero latency to patient care workflows. |
+| **Context-aware detection** | We understand the difference between a nurse accessing their assigned patients' charts and the same nurse accessing 200 unrelated records in 5 minutes. Rules are expressed in clinical terms, not raw logs. |
+| **Defense in depth at the data layer** | Security at the network perimeter is necessary but insufficient — once an attacker has valid credentials, perimeter controls are blind. We monitor at the EHR data-access layer, where the actual PHI lives. |
+| **Open-core, community-auditable** | The platform is AGPL v3. Every line of code is open for inspection by hospital security teams, pen testers, and researchers. Security through transparency, not obscurity. |
+| **Built for the homelab, hardened for production** | We develop and test against simulated hospital environments first — the same stack a security researcher runs on their laptop at home is the stack deployed in production. |
+
+### Why build this in a homelab?
+
+A hospital's production EHR is the wrong place to develop and test security tools. A homelab is the right place:
+
+1. **Safety.** You can simulate ransomware, data exfiltration, and insider abuse without risking real patient data or triggering a code blue. Mistakes in a homelab are learning opportunities, not HIPAA violations.
+2. **Fidelity.** A proper homelab running FHIR servers (HAPI FHIR, InterSystems IRIS community edition), HL7 engines (Mirth Connect), and realistic synthetic patient data (Synthea) behaves like a real hospital network. If it works here, it works there.
+3. **Reproducibility.** Every attack, defense, and detection rule can be tested, broken, fixed, and re-tested deterministically. No dependence on production traffic patterns or adversary behavior you cannot control.
+4. **Skill development.** Hospital security teams need hands-on experience with EHR-specific threats — FHIR API abuse, HL7 injection, audit log tampering, medical device network exploits. A homelab is the only safe place to build these skills.
+5. **Penetration testing readiness.** Before CyberHosp ever touches a real hospital network, it will be tested against realistic homelab environments — the same setup described in this repo. When you pen test it, you are testing what was forged in the same fire.
+
+The CyberHosp development loop:
+```
+Homelab (develop + break) → Staging (validate + tune) → Production (monitor + protect)
+```
+
+---
 
 ```mermaid
 flowchart TB
