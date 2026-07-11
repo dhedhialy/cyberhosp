@@ -26,6 +26,58 @@ Healthcare is the most attacked industry on the planet — **14 years running**.
 | OCR settlements in 2025 alone | **21** actions, $6.6M+ in fines | HHS OCR / One Guy Consulting |
 | Cumulative individuals affected by healthcare breaches since 2009 | **935.5M** — 2.6× the US population | HHS OCR |
 
+### What causes healthcare breaches
+
+```mermaid
+pie showData
+    "Vulnerability Exploitation" : 20
+    "Phishing" : 16
+    "Stolen Credentials" : 11
+    "Social Engineering / BEC" : 7
+    "Malicious Insider" : 6
+    "Ransomware" : 8
+    "Other / Misc Errors" : 32
+```
+*Source: Verizon DBIR 2026, IBM Cost of a Data Breach 2025*
+
+### Breach cost by industry — healthcare leads by a wide margin
+
+| Industry | Avg Breach Cost (2025) | vs Healthcare |
+|----------|----------------------|--------------|
+| **Healthcare** | **$10.93M** | — |
+| Financial | $5.90M | 46% less |
+| Technology | $4.50M | 59% less |
+| Energy | $4.80M | 56% less |
+| Pharmaceuticals | $5.05M | 54% less |
+| Industrial | $4.65M | 57% less |
+| Retail | $2.96M | 73% less |
+| Education | $3.40M | 69% less |
+*Sources: IBM Cost of a Data Breach 2025, Sprinto Data Breach Statistics 2026*
+
+### Breach trend — 2024 was the worst year on record
+
+| Year | Large Breaches (500+ records) | Individuals Affected |
+|------|------------------------------|---------------------|
+| 2020 | 642 | ~27M |
+| 2021 | 714 | ~40M |
+| 2022 | 707 | ~52M |
+| 2023 | 716 | ~133M |
+| 2024 | **725** | **~289M** |
+| 2025 | — | ~61.6M |
+*Source: HHS OCR Breach Portal, HIPAA Journal 2024 Healthcare Data Breach Report*
+
+### Major breach timeline
+
+```mermaid
+timeline
+    title Largest Healthcare Data Breaches
+    2015 : Anthem: 78.8M records ($16M settlement)
+    2021 : Florida hospital: first patient death linked to ransomware
+    2023 : HCA Healthcare: 11M patients : Managed Care of NA: 8.9M
+    2024 : Change Healthcare: 192.7M (largest in history) : Record 725 breaches, 289M exposed
+    2025 : DaVita ransomware: 2.6M : Yale New Haven: 5.6M
+```
+
 ### Why healthcare is uniquely vulnerable
 
 - **EHRs are treasure troves:** A single patient record contains SSN, insurance, billing, diagnosis, medications, and biometrics — worth 10–50× a credit card number on the black market.
@@ -53,47 +105,44 @@ Existing solutions are fragmented:
 
 **CyberHosp bridges clinical and security domains** — it speaks FHIR/HL7, understands PHI context, detects anomalies at the data-access level, and enforces policy at the API gateway in real time.
 
+### Regulatory heat map — penalty exposure is accelerating
+
+```mermaid
+xychart-beta
+    title "HHS OCR HIPAA Settlements by Year"
+    x-axis ["2020", "2021", "2022", "2023", "2024", "2025"]
+    y-axis "Settlements" 0 --> 25
+    bar [12, 8, 11, 12, 14, 21]
+```
+*Source: HHS OCR Enforcement Highlights, One Guy Consulting HIPAA Fine Analysis 2025*
+
 ---
 
 ## Platform Architecture
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                     Hospital Network                          │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
-│  │  Epic    │  │  Cerner  │  │ Meditech │  │  Other   │     │
-│  │  EHR     │  │  EHR     │  │  EHR     │  │  Systems │     │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘     │
-│       │             │             │             │            │
-│       └─────────────┼─────────────┼─────────────┘            │
-│                     │             │                          │
-│              ┌──────▼─────────────▼──────┐                   │
-│              │   CyberHosp Integration   │                   │
-│              │   Layer (FHIR R4/R5,      │                   │
-│              │   HL7 v2, Custom APIs)    │                   │
-│              └──────────────┬────────────┘                   │
-│                             │                                │
-│              ┌──────────────▼────────────┐                   │
-│              │   Audit Pipeline          │                   │
-│              │   (Immutable, WORM store) │                   │
-│              └──────────────┬────────────┘                   │
-│                             │                                │
-│              ┌──────────────▼────────────┐                   │
-│              │   Detection Engine        │                   │
-│              │   • Behavioral Analytics  │                   │
-│              │   • Anomaly Detection     │                   │
-│              │   • DLP Rules Engine      │                   │
-│              │   • Threat Intel Feeds    │                   │
-│              └──────────────┬────────────┘                   │
-│                             │                                │
-│              ┌──────────────▼────────────┐                   │
-│              │   Response Layer          │                   │
-│              │   • Real-time Alerts      │                   │
-│              │   • Automated Mitigation  │                   │
-│              │   • Incident Playbooks    │                   │
-│              │   • SIEM/SOAR Integration │                   │
-│              └───────────────────────────┘                   │
-└──────────────────────────────────────────────────────────────┘
+## Platform Architecture
+
+```mermaid
+flowchart TB
+    subgraph HOSPITAL["Hospital Network"]
+        EPIC[Epic EHR]
+        CERNER[Cerner EHR]
+        MEDITECH[Meditech EHR]
+        OTHER[Other Systems]
+    end
+
+    subgraph CYBERHOSP["CyberHosp Platform"]
+        INTEGRATION[Integration Layer<br/>FHIR R4/R5 · HL7 v2 · Custom APIs]
+        AUDIT[Audit Pipeline<br/>Immutable WORM Store · Crypto Chain]
+        DETECTION[Detection Engine<br/>Behavioral Analytics · Anomaly Detection<br/>DLP Rules · Threat Intelligence]
+        RESPONSE[Response Layer<br/>Real-time Alerts · Automated Mitigation<br/>Incident Playbooks · SIEM/SOAR]
+    end
+
+    EPIC & CERNER & MEDITECH & OTHER --> INTEGRATION
+    INTEGRATION --> AUDIT
+    AUDIT --> DETECTION
+    DETECTION --> RESPONSE
+    RESPONSE --> SIEM[(SIEM / Dashboard)]
 ```
 
 ### Core Components
