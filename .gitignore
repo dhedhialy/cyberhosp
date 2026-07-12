@@ -40,9 +40,12 @@ docker/data/
 docker/logs/
 
 # Audit data
-data/
+data/*
 !data/.gitkeep
+!data/synthea-sample/
 
 # Logs
 *.log
 logs/
+
+
