@@ -1,5 +1,6 @@
 # CyberHosp
 
+[![CI](https://github.com/dhedhialy/cyberhosp/actions/workflows/ci.yml/badge.svg)](https://github.com/dhedhialy/cyberhosp/actions/workflows/ci.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](pyproject.toml)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
