@@ -35,6 +35,8 @@ dev = [
 include = ["src"]
 pythonVersion = "3.12"
 typeCheckingMode = "basic"
+reportUnknownParameterType = false
+reportMissingTypeStubs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
