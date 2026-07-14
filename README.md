@@ -205,6 +205,7 @@ An attacker phishes nurse Valdez's credentials, waits 8 days (bypassing physics-
 - [ ] SSRF protection at FHIR proxy
 - [ ] Rate limiting and API abuse detection
 - [ ] Ransomware early warning
+- [ ] Threat coverage: 53 threats mapped, 6 in-scope gaps tracked as issues
 
 ### Phase 4 — Release
 - [ ] Dashboard and reporting
