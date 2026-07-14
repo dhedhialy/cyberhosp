@@ -2,11 +2,12 @@
 
 from cyberhosp.monitor.analyzer import BehaviorAnalyzer
 from cyberhosp.monitor.audit import AuditPipeline
+from cyberhosp.monitor.base import MonitorComponent
 
 
 class TestAuditPipeline:
-    def test_audit_pipeline_instantiable(self) -> None:
-        assert AuditPipeline() is not None
+    def test_audit_pipeline_inherits_monitor_component(self) -> None:
+        assert isinstance(AuditPipeline(), MonitorComponent)
 
-    def test_behavior_analyzer_instantiable(self) -> None:
-        assert BehaviorAnalyzer() is not None
+    def test_behavior_analyzer_inherits_monitor_component(self) -> None:
+        assert isinstance(BehaviorAnalyzer(), MonitorComponent)
